@@ -284,10 +284,12 @@
 </details>
 
 <details>
-    <summary style="font-size: 1.5em;"> 장바구니 API 설계 </summary>
+    <summary style="font-size: 1.5em;"> 장바구니(아이템) API 설계 </summary>
     <div markdown="5">
 
 ### 1. 장바구니 담기
+
+-   JWT 필요
 
 -   Method
     -   POST
@@ -299,14 +301,15 @@
 
     ```javascript
     {
+        user_id: 회원 id,
         book_id: 도서 id,
-        count: 수량
+        quantity: 수량
     }
     ```
 
 -   Response Body
 
-### 2. 장바구니 조회
+### 2. 장바구니 아이템 목록 조회 / 선택한 장바구니 상품 목록 조회
 
 -   Method
     -   GET
@@ -315,22 +318,34 @@
 -   HTTP status code
     -   성공 200
 -   Request Body
+
+    ```javascript
+    // JWT 대신
+    {
+        user_id: 회원 id
+        selected: [cartItemId, cartItemId ...]
+    }
+
+    ```
+
 -   Response Body
 
     ```javascript
     [
         {
+            id: 장바구니 도서 id,
             book_id: 도서 id,
             title: "도서 제목",
             summary: "도서 요약",
-            count: 수량,
+            quantity: 수량,
             price: 가격
         },
         {
+            id: 장바구니 도서 id,
             book_id: 도서 id,
             title: "도서 제목",
             summary: "도서 요약",
-            count: 수량,
+            quantity: 수량,
             price: 가격
         },
         ...
@@ -349,7 +364,7 @@
 
 -   Response Body
 
-### 4. (장바구니에서 선택한) 주문 "예상" 상품 목록 조회
+### 4. 선택한 장바구니 상품 목록 조회
 
 -   Method
     -   GET

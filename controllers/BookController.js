@@ -14,13 +14,13 @@ const getAllBooks = (req, res) => {
     let values = [];
 
     if (category_id && news) {
-        sql = sql += ' WHERE category_id = ? AND published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
+        sql += ' WHERE category_id = ? AND published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
         values.push(category_id);
     } else if (category_id) {
-        sql = sql += ' WHERE category_id = ?';
+        sql += ' WHERE category_id = ?';
         values.push(category_id);
     } else if (news) {
-        sql = sql += ' WHERE published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
+        sql += ' WHERE published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
     }
 
     sql += ' LIMIT ? OFFSET ?';
@@ -43,7 +43,7 @@ const getBookDetail = (req, res) => {
 
     let sql = `SELECT *,
                     (SELECT count(*) FROM likes WHERE books.id = book_id )AS likes,
-                    (SELECT EXISTS (SELECT * FROM likes WHERE user_id=? AND book_id=?)) AS liked
+                    EXISTS (SELECT * FROM likes WHERE user_id=? AND book_id=?) AS liked
                FROM books
                LEFT JOIN category ON books.category_id = category.category_id
                WHERE books.id=?;`;

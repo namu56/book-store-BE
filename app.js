@@ -20,6 +20,6 @@ const orderRouter = require('./routes/orders');
 app.use('/users', userRouter);
 app.use('/books', bookRouter);
 app.use('/category', categoryRouter);
-app.use('/carts', cartRouter);
+app.use('/cart', cartRouter);
 app.use('/likes', likeRouter);
 app.use('/orders', orderRouter);
