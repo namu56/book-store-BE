@@ -320,10 +320,9 @@
 -   Request Body
 
     ```javascript
-    // JWT 대신
     {
-        user_id: 회원 id
-        selected: [cartItemId, cartItemId ...]
+        user_id: 회원 id, // JWT 대신
+        selected: [cartItem_id, cartItem_id ...]
     }
 
     ```
@@ -364,48 +363,6 @@
 
 -   Response Body
 
-### 4. 선택한 장바구니 상품 목록 조회
-
--   Method
-    -   GET
--   URI
-    -   /cart
--   HTTP status code
-    -   성공 200
--   Request Body
-
-    ```javascript
-    [
-        {cart_item_id: 장바구니 도서 id},
-        {cart_item_id: 장바구니 도서 id},
-        ...
-    ]
-    ```
-
--   Response Body
-
-    ```javascript
-    [
-        {
-            cart_item_id: 장바구니 도서 id,
-            book_id: 도서 id,
-            title: "도서 제목",
-            summary: "도서 요약",
-            count: 수량,
-            price: 가격
-        },
-        {
-            cart_item_id: 장바구니 도서 id,
-            book_id: 도서 id,
-            title: "도서 제목",
-            summary: "도서 요약",
-            count: 수량,
-            price: 가격
-        },
-        ...
-    ]
-    ```
-
     </div>
 
 </details>
@@ -431,28 +388,29 @@
 
     ```javascript
     {
-        items:
+        cartItems: // 3. orderedBook INSERT
         [
             {
-                cart_item_id: 장바구니 도서 id,
+                cartItem_id: 장바구니 도서 id,
                 book_id: 도서 id,
-                count: 수량
+                quantity: 수량
             },
             {
-                cart_item_id: 장바구니 도서 id,
+                cartItem_id: 장바구니 도서 id,
                 book_id: 도서 id,
-                count: 수량
+                quantity: 수량
             }
             ...
         ]
-        delivery: {
+        delivery: { // 1. delivery INSERT
             adress: "주소",
             receiver: "받는 사람",
             contact: "010-0000-0000",
         }
-        book_title: "대표 책 제목",
-        total_price: "총 금액",
-        total_count: "총 수량"
+        userId: 회원 id, // 2. orders INSERT
+        firstBookTitle: "대표 책 제목",
+        totalPrice: "총 금액",
+        totalQuantity: "총 수량"
     }
     ```
 
@@ -472,7 +430,8 @@
     ```javascript
     [
         {
-            order_id: "주문 id",
+            user_id: 회원 id,
+            order_id: 주문 id,
             created_at: "주문 일자",
             delivery: {
                 adress: "배송지 주소",
@@ -480,20 +439,21 @@
                 contact: "010-0000-0000",
             },
             book_title: "대표 책 제목",
-            total_price: "총 결제 금액",
-            total_count: "총 수량"
+            totalPrice: "총 결제 금액",
+            totalQuantity: "총 수량"
         },
         {
-            order_id: "주문 id",
+            user_id: 회원 id,
+            order_id: 주문 id,
             created_at: "주문 일자",
             delivery: {
                 adress: "배송지 주소",
                 receiver: "받는 사람 이름",
                 contact: "010-0000-0000",
             },
-            book_title: "대표 책 제목",
-            total_price: "총 결제 금액",
-            total_count: "총 수량"
+            bookTitle: "대표 책 제목",
+            totalPrice: "총 결제 금액",
+            totalQuantity: "총 수량"
         }
         ...
     ]
@@ -518,14 +478,14 @@
             title: "책 제목",
             author: "작가명",
             price: 가격,
-            count: 수량,
+            quantity: 수량,
         },
         {
             book_id: "도서 id",
             title: "책 제목",
             author: "작가명",
             price: 가격,
-            count: 수량,
+            quantity: 수량,
         }
         ...
     ]
