@@ -1,50 +1,46 @@
-const conn = require('../mariadb'); // db 모듈
+const conn = require('../mariadb').promise(); // db 모듈
 const { StatusCodes } = require('http-status-codes');
 const { handleQueryError } = require('../utils/ErrorHandler');
 
 // 주문하기
-const order = (req, res) => {
+const order = async (req, res) => {
     const { cartItems, delivery, totalQuantity, totalPrice, userId, firstBookTitle } = req.body;
 
-    let delivery_id;
-    let order_id;
+    let deliveryId;
+    let orderId;
 
-    let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?)`;
-    let values = [delivery.address, delivery.receiver, delivery.contact];
+    try {
+        let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?)`;
+        let values = [delivery.address, delivery.receiver, delivery.contact];
 
-    conn.query(sql, values, (err, results) => {
-        if (err) return handleQueryError(err, res);
+        const [deliveryResults] = await conn.query(sql, values);
+        console.log(deliveryResults);
 
-        delivery_id = results.insertId;
+        deliveryId = deliveryResults.insertId;
 
-        return res.status(StatusCodes.OK).json(results);
-    });
+        sql = `INSERT INTO orders (user_id, delivery_id, book_title, total_quantity, total_price)
+           VALUES (?, ?, ?, ?, ?)`;
+        values = [userId, deliveryId, firstBookTitle, totalQuantity, totalPrice];
 
-    sql = `INSERT INTO orders (user_id, delivery_id, book_title, total_quantity, total_price)
-           VALUES (?, ? , ?, ?, ?)`;
-    values = [userId, delivery_id, firstBookTitle, totalQuantity, totalPrice];
+        const [orderResults] = await conn.query(sql, values);
+        console.log(orderResults);
 
-    conn.query(sql, values, (err, results) => {
-        if (err) return handleQueryError(err, res);
+        orderId = orderResults.insertId;
 
-        order_id = results.insertId;
+        sql = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?;`;
 
-        return res.status(StatusCodes.OK).json(results);
-    });
+        values = [];
+        cartItems.forEach((cartItem) => {
+            values.push([orderId, cartItem.book_id, cartItem.quantity]);
+        });
 
-    sql = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?;`;
+        const [orderedResults] = await conn.query(sql, [values]);
+        console.log(orderResults);
 
-    values = [];
-    cartItems.forEach((cartItem) => {
-        values.push([order_id, cartItem.book_id, cartItem.quantity]);
-        console.log(values);
-    });
-
-    conn.query(sql, [values], (err, results) => {
-        if (err) return handleQueryError(err, res);
-
-        return res.status(StatusCodes.OK).json(results);
-    });
+        return res.status(StatusCodes.OK).json({ message: '주문하기에 성공하였습니다.' });
+    } catch (err) {
+        return handleQueryError(err, res);
+    }
 };
 
 // 주문 목록 조회

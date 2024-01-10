@@ -1,8 +1,7 @@
+const dotenv = require('dotenv').config();
+
 // mysql 모듈 소환
 const mariadb = require('mysql2');
-
-const dotenv = require('dotenv');
-dotenv.config();
 
 // DB와 연결 통로 생성
 const connection = mariadb.createConnection({
