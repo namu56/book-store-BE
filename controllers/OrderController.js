@@ -6,35 +6,34 @@ const { handleQueryError } = require('../utils/ErrorHandler');
 const order = (req, res) => {
     const { cartItems, delivery, totalQuantity, totalPrice, userId, firstBookTitle } = req.body;
 
-    let delivery_id = 3;
-    let order_id = 2;
+    let delivery_id;
+    let order_id;
 
     let sql = `INSERT INTO delivery (address, receiver, contact) VALUES (?, ?, ?)`;
     let values = [delivery.address, delivery.receiver, delivery.contact];
 
-    // conn.query(sql, values, (err, results) => {
-    //     if (err) return handleQueryError(err, res);
+    conn.query(sql, values, (err, results) => {
+        if (err) return handleQueryError(err, res);
 
-    //     delivery_id = results.insertId;
+        delivery_id = results.insertId;
 
-    //     return res.status(StatusCodes.OK).json(results);
-    // });
+        return res.status(StatusCodes.OK).json(results);
+    });
 
     sql = `INSERT INTO orders (user_id, delivery_id, book_title, total_quantity, total_price)
            VALUES (?, ? , ?, ?, ?)`;
     values = [userId, delivery_id, firstBookTitle, totalQuantity, totalPrice];
 
-    // conn.query(sql, values, (err, results) => {
-    //     if (err) return handleQueryError(err, res);
+    conn.query(sql, values, (err, results) => {
+        if (err) return handleQueryError(err, res);
 
-    //     order_id = results.insertId;
+        order_id = results.insertId;
 
-    //     return res.status(StatusCodes.OK).json(results);
-    // });
+        return res.status(StatusCodes.OK).json(results);
+    });
 
     sql = `INSERT INTO orderedBook (order_id, book_id, quantity) VALUES ?;`;
 
-    // cartItems 는 배열. 요소들을 하나씩 꺼내서(forEach 사용)
     values = [];
     cartItems.forEach((cartItem) => {
         values.push([order_id, cartItem.book_id, cartItem.quantity]);
