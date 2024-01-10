@@ -14,7 +14,6 @@ const order = async (req, res) => {
         let values = [delivery.address, delivery.receiver, delivery.contact];
 
         const [deliveryResults] = await conn.query(sql, values);
-        console.log(deliveryResults);
 
         deliveryId = deliveryResults.insertId;
 
@@ -23,7 +22,6 @@ const order = async (req, res) => {
         values = [userId, deliveryId, firstBookTitle, totalQuantity, totalPrice];
 
         const [orderResults] = await conn.query(sql, values);
-        console.log(orderResults);
 
         orderId = orderResults.insertId;
 
@@ -35,7 +33,6 @@ const order = async (req, res) => {
         });
 
         const [orderedResults] = await conn.query(sql, [values]);
-        console.log(orderResults);
 
         return res.status(StatusCodes.OK).json({ message: '주문하기에 성공하였습니다.' });
     } catch (err) {
