@@ -45,7 +45,22 @@ const order = async (req, res) => {
 };
 
 // 주문 목록 조회
-const getOrders = (req, res) => {};
+const getOrders = async (req, res) => {
+    let sql = `SELECT orders.id,
+                      created_at,
+                      address,
+                      receiver,
+                      contact,
+                      book_title,
+                      total_quantity,
+                      total_price
+               FROM orders
+               LEFT JOIN delivery 
+               ON orders.delivery_id = delivery.id;`;
+    let [getOrdersResults] = await conn.query(sql);
+
+    return res.status(StatusCodes.OK).json(rows);
+};
 
 // 주문 상세 조회
 const getOrderDetail = (req, res) => {};

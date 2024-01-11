@@ -388,8 +388,8 @@
 
     ```javascript
     {
-        // 3. orderedBook INSERT
-        cartItems: [장바구니 도서 id, 장바구니 도서 id...]
+
+        cartItems: [장바구니 도서 id, 장바구니 도서 id...] // 3. orderedBook INSERT
         delivery: { // 1. delivery INSERT
             adress: "주소",
             receiver: "받는 사람",
@@ -404,7 +404,7 @@
 
 -   Response Body
 
-### 2. 주문 내역 조회
+### 2. 주문 목록(내역) 조회
 
 -   Method
     -   GET
@@ -414,31 +414,31 @@
     -   성공 200
 -   Request Body
 
+    ```javascript
+    {
+        "userId": 사용자 id
+    }
+    ```
+
 -   Response Body
     ```javascript
     [
         {
-            user_id: 회원 id,
-            order_id: 주문 id,
+            orderId: 주문 id,
             created_at: "주문 일자",
-            delivery: {
-                adress: "배송지 주소",
-                receiver: "받는 사람 이름",
-                contact: "010-0000-0000",
-            },
-            book_title: "대표 책 제목",
+            adress: "배송지 주소",
+            receiver: "받는 사람 이름",
+            contact: "010-0000-0000",
+            bookTitle: "대표 책 제목",
             totalPrice: "총 결제 금액",
             totalQuantity: "총 수량"
         },
         {
-            user_id: 회원 id,
-            order_id: 주문 id,
+            orderId: 주문 id,
             created_at: "주문 일자",
-            delivery: {
-                adress: "배송지 주소",
-                receiver: "받는 사람 이름",
-                contact: "010-0000-0000",
-            },
+            adress: "배송지 주소",
+            receiver: "받는 사람 이름",
+            contact: "010-0000-0000",
             bookTitle: "대표 책 제목",
             totalPrice: "총 결제 금액",
             totalQuantity: "총 수량"
@@ -462,14 +462,14 @@
     ```javascript
     [
         {
-            book_id: "도서 id",
+            bookId: "도서 id",
             title: "책 제목",
             author: "작가명",
             price: 가격,
             quantity: 수량,
         },
         {
-            book_id: "도서 id",
+            bookId: "도서 id",
             title: "책 제목",
             author: "작가명",
             price: 가격,
