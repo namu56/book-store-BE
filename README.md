@@ -388,20 +388,8 @@
 
     ```javascript
     {
-        cartItems: // 3. orderedBook INSERT
-        [
-            {
-                cartItem_id: 장바구니 도서 id,
-                book_id: 도서 id,
-                quantity: 수량
-            },
-            {
-                cartItem_id: 장바구니 도서 id,
-                book_id: 도서 id,
-                quantity: 수량
-            }
-            ...
-        ]
+        // 3. orderedBook INSERT
+        cartItems: [장바구니 도서 id, 장바구니 도서 id...]
         delivery: { // 1. delivery INSERT
             adress: "주소",
             receiver: "받는 사람",
