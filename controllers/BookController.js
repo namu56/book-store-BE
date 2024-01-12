@@ -4,7 +4,7 @@ const { handleQueryError } = require('../utils/ErrorHandler');
 
 // (카테고리 별, 신간 여부) 전체 도서 목록 조회
 const getAllBooks = (req, res) => {
-    let { category_id, news, limit, currentPage } = req.query;
+    let { categoryId, news, limit, currentPage } = req.query;
 
     let offset = limit * (currentPage - 1);
 
@@ -13,12 +13,12 @@ const getAllBooks = (req, res) => {
                FROM books`;
     let values = [];
 
-    if (category_id && news) {
+    if (categoryId && news) {
         sql += ' WHERE category_id = ? AND published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
-        values.push(category_id);
-    } else if (category_id) {
+        values.push(categoryId);
+    } else if (categoryId) {
         sql += ' WHERE category_id = ?';
-        values.push(category_id);
+        values.push(categoryId);
     } else if (news) {
         sql += ' WHERE published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
     }
@@ -38,8 +38,8 @@ const getAllBooks = (req, res) => {
 };
 
 const getBookDetail = (req, res) => {
-    let { user_id } = req.body;
-    let { book_id } = req.params;
+    let { userId } = req.body;
+    let { bookId } = req.params;
 
     let sql = `SELECT *,
                     (SELECT count(*) FROM likes WHERE books.id = book_id )AS likes,
@@ -47,7 +47,7 @@ const getBookDetail = (req, res) => {
                FROM books
                LEFT JOIN category ON books.category_id = category.category_id
                WHERE books.id=?;`;
-    let values = [user_id, book_id, book_id];
+    let values = [userId, bookId, bookId];
     conn.query(sql, values, (err, results) => {
         if (err) return handleQueryError(err, res);
 

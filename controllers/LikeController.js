@@ -4,11 +4,11 @@ const { handleQueryError } = require('../utils/ErrorHandler');
 
 const addLike = (req, res) => {
     // 좋아요 추가
-    const { book_id } = req.params;
-    const { user_id } = req.body;
+    const { bookId } = req.params;
+    const { userId } = req.body;
 
     let sql = 'INSERT INTO likes (user_id, book_id) VALUES (?, ?)';
-    let values = [user_id, book_id];
+    let values = [userId, bookId];
     conn.query(sql, values, (err, results) => {
         if (err) return handleQueryError(err, res);
 
@@ -18,11 +18,11 @@ const addLike = (req, res) => {
 
 const removeLike = (req, res) => {
     // 좋아요 취소
-    const { book_id } = req.params;
-    const { user_id } = req.body;
+    const { bookId } = req.params;
+    const { userId } = req.body;
 
     let sql = 'DELETE FROM likes WHERE user_id = ? AND book_id = ?';
-    let values = [user_id, book_id];
+    let values = [userId, bookId];
     conn.query(sql, values, (err, results) => {
         if (err) return handleQueryError(err, res);
 
