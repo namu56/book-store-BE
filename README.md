@@ -49,6 +49,12 @@
     -   /reset
 -   HTTP status code
     -   성공 200
+-   Request Header
+    ```javascript
+    {
+        "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
+    }
+    ```
 -   Request Body
     ```javascript
     {
@@ -262,8 +268,12 @@
 
     -   성공 200
 
--   header
-    -   token
+-   Request Header
+    ```javascript
+    {
+        "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
+    }
+    ```
 -   Request Body
 
 -   Response Body
@@ -276,6 +286,12 @@
     -   /likes/{book_id}
 -   HTTP status code
     -   성공 200
+-   Request Header
+    ```javascript
+    {
+        "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
+    }
+    ```
 -   Request Body
 
 -   Response Body
