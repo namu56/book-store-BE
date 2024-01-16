@@ -45,7 +45,7 @@ const login = (req, res) => {
                 },
                 process.env.PRIVATE_KEY,
                 {
-                    expiresIn: '1h',
+                    expiresIn: '5h',
                     issuer: 'oneik',
                 }
             );

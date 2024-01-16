@@ -43,6 +43,9 @@
 
 ### 3. 비밀번호 초기화 요청
 
+-   비밀번호를 잊어버렸을 때
+-   즉, 로그인 전에 사용하는 기능
+
 -   Method
     -   POST
 -   URI
@@ -113,29 +116,37 @@
     전체 도서 목록에는 도서의 상세 정보를 포함합니다
     필요한 데이터만 선별하여 구현 부탁드립니다
     */
-    [
-        {
-            book_id: 도서 id,
-            title: "도서 제목",
-            img: 이미지 id(picsum image #id)
-            author: "도서 작가",
-            summary: "도서 요약 설명",
-            price: 가격,
-            likes: 좋아요 수,
-            published_date: "출간일"
-        },
-        {
-            book_id: 도서 id,
-            title: "도서 제목",
-            img: 이미지 id(picsum image #id)
-            author: "도서 작가",
-            summary: "도서 요약 설명",
-            price: 가격,
-            likes: 좋아요 수,
-            published_date: "출간일"
+    {
+
+        books: [
+            {
+                book_id: 도서 id,
+                title: "도서 제목",
+                img: 이미지 id(picsum image #id)
+                author: "도서 작가",
+                summary: "도서 요약 설명",
+                price: 가격,
+                likes: 좋아요 수,
+                published_date: "출간일"
+            },
+            {
+                book_id: 도서 id,
+                title: "도서 제목",
+                img: 이미지 id(picsum image #id)
+                author: "도서 작가",
+                summary: "도서 요약 설명",
+                price: 가격,
+                likes: 좋아요 수,
+                published_date: "출간일"
+            }
+            ...
+        ],
+        pagination: {
+            currentPage: 현재 페이지
+            totalBooks: 총 도서 수
         }
-        ...
-    ]
+
+    }
 
     ```
 
@@ -268,7 +279,7 @@
 
     -   성공 200
 
--   Request Header
+-   Request Headers
     ```javascript
     {
         "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
@@ -286,7 +297,7 @@
     -   /likes/{book_id}
 -   HTTP status code
     -   성공 200
--   Request Header
+-   Request Headers
     ```javascript
     {
         "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
@@ -313,11 +324,16 @@
     -   /cart
 -   HTTP status code
     -   성공 201
+-   Request Headers
+    ```javascript
+    {
+        "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
+    }
+    ```
 -   Request Body
 
     ```javascript
     {
-        user_id: 회원 id,
         book_id: 도서 id,
         quantity: 수량
     }
@@ -333,11 +349,16 @@
     -   /cart
 -   HTTP status code
     -   성공 200
+-   Request Headers
+    ```javascript
+    {
+        "authorization": "eyJhbGciOiJI~.3MiOiJvbmVpayJ9~.HPCqTMK"
+    }
+    ```
 -   Request Body
 
     ```javascript
     {
-        user_id: 회원 id, // JWT 대신
         selected: [cartItem_id, cartItem_id ...]
     }
 
