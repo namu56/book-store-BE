@@ -1,6 +1,6 @@
 const conn = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { QueryErrorHandler } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 const jwt = require('jsonwebtoken'); // jwt 모듈
 const crypto = require('crypto'); // crypto 모듈 : 암호화
 const dotenv = require('dotenv'); // dotenv 모듈
@@ -19,7 +19,11 @@ const join = (req, res) => {
     conn.query(sql, values, (err, results) => {
         if (err) throw new QueryErrorHandler('쿼리 에러 발생');
 
-        return res.status(StatusCodes.CREATED).json(results);
+        if (results.affectedRows) {
+            return res.status(StatusCodes.CREATED).json(results);
+        } else {
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
     });
 };
 

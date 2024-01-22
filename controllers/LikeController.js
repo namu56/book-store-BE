@@ -1,6 +1,6 @@
 const conn = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { QueryErrorHandler } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 
 const addLike = (req, res) => {
     // 좋아요 추가

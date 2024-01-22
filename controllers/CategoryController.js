@@ -1,6 +1,6 @@
 const conn = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { handleQueryError } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 
 const getAllCategory = (req, res) => {
     // 카테고리 전체 목록 리스트

@@ -1,10 +1,11 @@
-const conn = require('../mariadb').promise(); // db 모듈
+const pool = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { handleQueryError } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 const jwt = require('jsonwebtoken');
 
 // 주문하기
 const order = async (req, res) => {
+    const conn = await pool.getConnection();
     const { cartItems, delivery, totalQuantity, totalPrice, firstBookTitle } = req.body;
 
     try {

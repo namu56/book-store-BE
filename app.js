@@ -16,7 +16,7 @@ const categoryRouter = require('./routes/cagegory');
 const cartRouter = require('./routes/carts');
 const likeRouter = require('./routes/likes');
 const orderRouter = require('./routes/orders');
-const { errorHandler } = require('./utils/ErrorHandler');
+const { errorHandler } = require('./middlewares/errorHandler');
 
 app.use('/users', userRouter);
 app.use('/books', bookRouter);

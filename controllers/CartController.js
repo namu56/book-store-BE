@@ -1,6 +1,6 @@
 const conn = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { handleQueryError } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 const jwt = require('jsonwebtoken');
 
 // 장바구니 담기

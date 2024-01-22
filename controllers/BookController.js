@@ -1,57 +1,69 @@
-const conn = require('../mariadb'); // db 모듈
+const pool = require('../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
-const { QueryErrorHandler } = require('../utils/errorHandler');
+const { QueryErrorHandler } = require('../middlewares/errorHandler');
 const jwt = require('jsonwebtoken');
 
 // (카테고리 별, 신간 여부) 전체 도서 목록 조회
-const getAllBooks = (req, res) => {
-    let allBooksRes = {};
+const getAllBooks = async (req, res, next) => {
+    try {
+        const conn = await pool.getConnection();
 
-    let { categoryId, news, limit, currentPage } = req.query;
+        let allBooksAndPageData = {};
 
-    let offset = limit * (currentPage - 1);
+        let { categoryId, news, limit, currentPage } = req.query;
 
-    let sql = `SELECT SQL_CALC_FOUND_ROWS 
-                    *, 
-                    (SELECT count(*) FROM likes WHERE books.id = book_id)AS likes 
-               FROM books`;
-    let values = [];
+        let offset = limit * (currentPage - 1);
 
-    if (categoryId && news) {
-        sql += ' WHERE category_id = ? AND published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
-        values.push(categoryId);
-    } else if (categoryId) {
-        sql += ' WHERE category_id = ?';
-        values.push(categoryId);
-    } else if (news) {
-        sql += ' WHERE published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
-    }
+        let sql = `SELECT SQL_CALC_FOUND_ROWS 
+                        *, 
+                        (SELECT count(*) FROM likes WHERE books.id = book_id)AS likes 
+                   FROM books`;
+        let values = [];
 
-    sql += ' LIMIT ? OFFSET ?';
-    values.push(parseInt(limit), offset);
-
-    conn.query(sql, values, (err, results) => {
-        if (err) throw new QueryErrorHandler('쿼리 에러 발생');
-        if (results.length) {
-            allBooksRes.books = results;
-        } else {
-            return res.status(StatusCodes.NOT_FOUND).end();
+        if (categoryId && news) {
+            sql += ' WHERE category_id = ? AND published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
+            values.push(categoryId);
+        } else if (categoryId) {
+            sql += ' WHERE category_id = ?';
+            values.push(categoryId);
+        } else if (news) {
+            sql += ' WHERE published_date BETWEEN DATE_SUB(NOW(), INTERVAL 1 MONTH) AND NOW()';
         }
-    });
 
-    sql = `SELECT found_rows()`;
+        sql += ' LIMIT ? OFFSET ?';
+        values.push(parseInt(limit), offset);
 
-    conn.query(sql, values, (err, results) => {
-        if (err) throw new QueryErrorHandler('쿼리 에러 발생');
+        const [allBooks] = await conn.query(sql, values);
+        if (allBooks.length) {
+            allBooks.map((book) => {
+                book.publishedDate = book.published_date;
+                delete book.published_date;
+            });
+            allBooksAndPageData.books = allBooks;
+        } else {
+            return res.status(StatusCodes.BAD_REQUEST).end();
+        }
+
+        sql = `SELECT found_rows()`;
+
+        const pageData = await conn.query(sql, values);
+
+        console.log(pageData);
 
         let pagination = {
             currentPage: parseInt(currentPage),
-            totalCount: results[0]['found_rows()'],
+            totalCount: pageData[0][0]['found_rows()'],
         };
 
-        allBooksRes.pagination = pagination;
-        return res.status(StatusCodes.OK).json(allBooksRes);
-    });
+        allBooksAndPageData.pagination = pagination;
+
+        conn.release();
+
+        return res.status(StatusCodes.OK).json(allBooksAndPageData);
+    } catch (err) {
+        console.log(err);
+        next(err);
+    }
 };
 
 const getBookDetail = (req, res) => {
