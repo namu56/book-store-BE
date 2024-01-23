@@ -10,13 +10,13 @@ app.use(express.json());
 
 app.listen(process.env.PORT);
 
-const userRouter = require('./routes/users');
-const bookRouter = require('./routes/books');
-const categoryRouter = require('./routes/cagegory');
-const cartRouter = require('./routes/carts');
-const likeRouter = require('./routes/likes');
-const orderRouter = require('./routes/orders');
-const { errorHandler } = require('./middlewares/errorHandler');
+const userRouter = require('./src/routes/users');
+const bookRouter = require('./src/routes/books');
+const categoryRouter = require('./src/routes/cagegory');
+const cartRouter = require('./src/routes/carts');
+const likeRouter = require('./src/routes/likes');
+const orderRouter = require('./src/routes/orders');
+const { errorHandler } = require('./src/middlewares/errorHandler');
 
 app.use('/users', userRouter);
 app.use('/books', bookRouter);

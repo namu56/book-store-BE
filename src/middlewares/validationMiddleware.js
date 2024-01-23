@@ -14,7 +14,7 @@ const checkEmail = (location, field) =>
 const checkPassword = (location, field) =>
     location(field).notEmpty().isLength({ min: 8, max: 16 }).withMessage('8~16 이내의 비밀번호를 입력해주세요.');
 
-const checkInt = (location, field) => location(field).notEmpty().isInt();
+const checkInt = (location, field) => location(field).optional().isInt();
 
 const checkBoolean = (location, field) => location(field).optional().isBoolean();
 

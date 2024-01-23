@@ -1,8 +1,7 @@
 const express = require('express'); // express 모듈
 const router = express.Router();
-const conn = require('../mariadb'); // db 모듈
 
-const { join, login, passwordResetRequest, passwordReset } = require('../controllers/UserController');
+const { join, login, passwordResetRequest, passwordReset } = require('../controllers/userController');
 const {
     validateJoin,
     validateLogin,

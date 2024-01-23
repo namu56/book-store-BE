@@ -1,4 +1,4 @@
-const conn = require('../mariadb'); // db 모듈
+const conn = require('../../mariadb'); // db 모듈
 const { StatusCodes } = require('http-status-codes');
 const { QueryErrorHandler } = require('../middlewares/errorHandler');
 
