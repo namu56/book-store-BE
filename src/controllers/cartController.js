@@ -5,16 +5,13 @@ const jwt = require('jsonwebtoken');
 
 // 장바구니 담기
 const addToCart = async (req, res, next) => {
-    try {
-        const { bookId, quantity } = req.body;
-        const { userId } = req.decodedJwt;
+    const { bookId, quantity } = req.body;
+    const { userId } = req.decodedJwt;
+    console.log(`bookId: ${bookId}, quantity: ${quantity}`);
 
-        const result = await cartService.addCartItem(userId, bookId, quantity);
+    const result = await cartService.addCartItem(userId, bookId, quantity);
 
-        return res.status(StatusCodes.CREATED).json(result);
-    } catch (err) {
-        next(err);
-    }
+    return res.status(StatusCodes.CREATED).json(result);
 };
 
 // 장바구니 아이템 목록 조회 / 선택된 장바구니 아이템 목록 조회
@@ -23,7 +20,10 @@ const getCartItems = async (req, res, next) => {
         const { selected } = req.body;
         const { userId } = req.decodedJwt;
 
-        const selectedCartItem = await cartService.selectedCartItem(userId, selected);
+        const selectedCartItem = await cartService.selectedCartItem(
+            userId,
+            selected
+        );
         return res.status(StatusCodes.OK).json(selectedCartItem);
     } catch (err) {
         next(err);

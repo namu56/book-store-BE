@@ -4,10 +4,18 @@ const { StatusCodes } = require('http-status-codes');
 // 주문하기
 const order = async (req, res, next) => {
     try {
-        const { cartItems, delivery, totalQuantity, totalPrice, firstBookTitle } = req.body;
+        const { items, delivery, totalQuantity, totalPrice, firstBookTitle } =
+            req.body;
         const { userId } = req.decodedJwt;
 
-        await orderService.order(cartItems, delivery, userId, totalQuantity, totalPrice, firstBookTitle);
+        await orderService.order(
+            items,
+            delivery,
+            userId,
+            totalQuantity,
+            totalPrice,
+            firstBookTitle
+        );
 
         return res.status(StatusCodes.CREATED).json({ message: '주문 성공' });
     } catch (err) {

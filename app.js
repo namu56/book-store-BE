@@ -1,6 +1,14 @@
 // express 모듈
 const express = require('express');
 const app = express();
+const cors = require('cors');
+
+const corsOptions = {
+    origin: 'http://localhost:3000', // 요청을 허용할 도메인 지정, 프론트엔드 개발 서버
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 // dotenv 모듈
 const dotenv = require('dotenv');

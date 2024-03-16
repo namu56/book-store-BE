@@ -6,7 +6,12 @@ const addCartItem = async (userId, bookId, quantity) => {
     const connection = await pool.getConnection();
 
     try {
-        return await cartModel.addCartItem(connection, userId, bookId, quantity);
+        return await cartModel.addCartItem(
+            connection,
+            userId,
+            bookId,
+            quantity
+        );
     } catch (err) {
         console.log(err);
         throw err;

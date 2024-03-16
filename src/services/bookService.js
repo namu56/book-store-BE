@@ -6,8 +6,18 @@ const allBooksData = async (categoryId, news, limit, currentPage) => {
     const connection = await pool.getConnection();
     try {
         let offset = limit * (currentPage - 1);
-        const allBooksData = await bookModel.findBooks(connection, categoryId, news, limit, offset);
-        const totalCountData = await bookModel.totalCountData(connection, categoryId, news);
+        const allBooksData = await bookModel.findBooks(
+            connection,
+            categoryId,
+            news,
+            limit,
+            offset
+        );
+        const totalCountData = await bookModel.totalCountData(
+            connection,
+            categoryId,
+            news
+        );
 
         let allBooksAndPageData = {};
 
@@ -26,7 +36,6 @@ const allBooksData = async (categoryId, news, limit, currentPage) => {
 
         return allBooksAndPageData;
     } catch (err) {
-        console.log(err);
         throw err;
     } finally {
         connection.release();
@@ -38,14 +47,13 @@ const bookDetailData = async (bookId, userId) => {
 
     try {
         const bookDetail = await bookModel.findBook(connection, bookId, userId);
-
+        console.log('bookDetail:', bookDetail);
         if (bookDetail) {
             return bookDetail;
         } else {
             throw new Error(StatusCodes.NOT_FOUND);
         }
     } catch (err) {
-        console.log(err);
         throw err;
     } finally {
         connection.release();

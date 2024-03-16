@@ -25,7 +25,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err instanceof QueryErrorHandler) {
         return res.status(err.statusCode).json({ message: err.message });
     } else {
-        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: '서버에 문제가 발생했습니다.' });
+        return res
+            .status(StatusCodes.INTERNAL_SERVER_ERROR)
+            .json({ message: '서버에 문제가 발생했습니다.' });
     }
 };
 

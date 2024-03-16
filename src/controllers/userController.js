@@ -11,10 +11,14 @@ const join = async (req, res, next) => {
 
         // 암호화된 비밀번호와 salt 값을 같이 DB에 저장
         const salt = crypto.randomBytes(10).toString('base64');
-        const hashedPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+        const hashedPassword = crypto
+            .pbkdf2Sync(password, salt, 10000, 10, 'sha512')
+            .toString('base64');
 
-        const result = await userService.join(email, hashedPassword, salt);
+        const user = { email, password: hashedPassword, salt };
 
+        const result = await userService.join(user);
+        console.log(result);
         return res.status(StatusCodes.CREATED).json(result);
     } catch (err) {
         next(err);
@@ -29,7 +33,7 @@ const login = async (req, res, next) => {
         res.cookie('token', token, {
             httpOnly: true,
         });
-        return res.status(StatusCodes.OK).json({ message: '로그인 성공' });
+        return res.status(StatusCodes.OK).json({ token: token });
     } catch (err) {
         next(err);
     }

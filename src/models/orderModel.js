@@ -8,17 +8,30 @@ const addDelivery = async (connection, delivery) => {
     return deliveryResult;
 };
 
-const addOrder = async (connection, userId, deliveryId, firstBookTitle, totalQuantity, totalPrice) => {
+const addOrder = async (
+    connection,
+    userId,
+    deliveryId,
+    firstBookTitle,
+    totalQuantity,
+    totalPrice
+) => {
     const sql = `INSERT INTO orders (user_id, delivery_id, book_title, total_quantity, total_price)
                  VALUES (?, ?, ?, ?, ?)`;
-    const values = [userId, deliveryId, firstBookTitle, totalQuantity, totalPrice];
+    const values = [
+        userId,
+        deliveryId,
+        firstBookTitle,
+        totalQuantity,
+        totalPrice,
+    ];
     const [orderResult] = await connection.query(sql, values);
 
     return orderResult;
 };
-const findCartItems = async (connection, cartItems) => {
+const findCartItems = async (connection, items) => {
     const sql = `SELECT * FROM cartItems WHERE id IN (?)`;
-    const [getCartItems] = await connection.query(sql, [cartItems]);
+    const [getCartItems] = await connection.query(sql, [items]);
 
     return getCartItems;
 };
@@ -33,9 +46,9 @@ const addOrderedBook = async (connection, orderId, getCartItems) => {
     return orderedBookResult;
 };
 
-const removeOrderedBook = async (connection, cartItems) => {
+const removeOrderedBook = async (connection, items) => {
     const sql = `DELETE FROM cartItems WHERE id IN (?)`;
-    const [removeCartItemsResult] = await connection.query(sql, [cartItems]);
+    const [removeCartItemsResult] = await connection.query(sql, [items]);
 };
 
 const findOrders = async (connection, userId) => {
@@ -69,6 +82,15 @@ const findOrder = async (connection, orderId) => {
                WHERE order_id = ?;`;
 
     const [orderDetailData] = await connection.query(sql, orderId);
+    console.log(orderDetailData);
     return orderDetailData;
 };
-module.exports = { addDelivery, addOrder, findCartItems, addOrderedBook, removeOrderedBook, findOrders, findOrder };
+module.exports = {
+    addDelivery,
+    addOrder,
+    findCartItems,
+    addOrderedBook,
+    removeOrderedBook,
+    findOrders,
+    findOrder,
+};

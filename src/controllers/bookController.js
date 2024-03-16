@@ -5,9 +5,13 @@ const { StatusCodes } = require('http-status-codes');
 const getAllBooks = async (req, res, next) => {
     try {
         const { categoryId, news, limit, currentPage } = req.query;
-        console.log(news);
 
-        const allBooksAndPageData = await bookService.allBooksData(categoryId, news, limit, currentPage);
+        const allBooksAndPageData = await bookService.allBooksData(
+            categoryId,
+            news,
+            limit,
+            currentPage
+        );
 
         return res.status(StatusCodes.OK).json(allBooksAndPageData);
     } catch (err) {

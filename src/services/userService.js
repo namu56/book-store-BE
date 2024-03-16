@@ -1,4 +1,5 @@
 const userModel = require('../models/userModel');
+const UserModel = require('../models/userModel');
 const pool = require('../../mariadb');
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
@@ -6,7 +7,7 @@ const crypto = require('crypto');
 const { emit } = require('process');
 const dotenv = require('dotenv').config();
 
-const join = async (email, hashedPassword, salt) => {
+const join = async (user) => {
     const connection = await pool.getConnection();
 
     try {
@@ -17,7 +18,16 @@ const join = async (email, hashedPassword, salt) => {
         } else {
             throw new Error(StatusCodes.CONFLICT, '이미 가입된 계정입니다.');
         }
+        // const existUser = await UserModel.findByEmail(user);
+        // console.log(existUser);
+
+        // if (existUser.length === 0) {
+        //     return await UserModel.createUser(user);
+        // } else {
+        //     throw new Error('이미 존재하는 아이디입니다');
+        // }
     } catch (err) {
+        console.log(err);
         throw err;
     } finally {
         connection.release();
@@ -29,7 +39,9 @@ const login = async (email, password) => {
 
     try {
         const loginUser = await userModel.userData(connection, email);
-        const hashedPassword = crypto.pbkdf2Sync(password, loginUser.salt, 10000, 10, 'sha512').toString('base64');
+        const hashedPassword = crypto
+            .pbkdf2Sync(password, loginUser.salt, 10000, 10, 'sha512')
+            .toString('base64');
 
         if (loginUser && loginUser.password === hashedPassword) {
             const token = jwt.sign(
@@ -39,7 +51,7 @@ const login = async (email, password) => {
                 },
                 process.env.PRIVATE_KEY,
                 {
-                    expiresIn: '1h',
+                    expiresIn: '12h',
                     issuer: 'oneik',
                 }
             );
@@ -80,9 +92,16 @@ const passwordReset = async (email, password) => {
     try {
         console.log(email, password);
         const salt = crypto.randomBytes(10).toString('base64');
-        const hashedPassword = crypto.pbkdf2Sync(password, salt, 10000, 10, 'sha512').toString('base64');
+        const hashedPassword = crypto
+            .pbkdf2Sync(password, salt, 10000, 10, 'sha512')
+            .toString('base64');
         console.log(salt, hashedPassword);
-        return await userModel.updateUserData(connection, hashedPassword, salt, email);
+        return await userModel.updateUserData(
+            connection,
+            hashedPassword,
+            salt,
+            email
+        );
     } catch (err) {
         throw err;
     } finally {
